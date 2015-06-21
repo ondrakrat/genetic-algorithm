@@ -2,6 +2,8 @@ package genetic;
 
 /**
  * Contains the solution and calculates fitness of {@link Individual}s
+ *
+ * @author Ondřej Kratochvíl
  */
 public class Fitness {
 

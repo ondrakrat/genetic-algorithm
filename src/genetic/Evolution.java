@@ -1,5 +1,7 @@
 package genetic;
 
+import genetic.selection.ParentSelector;
+
 import java.util.Random;
 
 /**
@@ -11,6 +13,11 @@ public class Evolution {
 
     private final double MUTATION_CHANCE = 0.01;    // the chance of every gene to be randomly mutated
     private final boolean ELITISM = true;  // whether to carry the fittest individual to the next generation
+    private ParentSelector parentSelector;  // algorithm for selecting parents from a population
+
+    public Evolution(ParentSelector parentSelector) {
+        this.parentSelector = parentSelector;
+    }
 
     /**
      * Combines the genes of given individuals and returns a new one. Genes have a chance of mutation.
@@ -46,7 +53,8 @@ public class Evolution {
             newPopulation.getMembers()[0] = oldPopulation.getFittest();
         }
         for (int i = ELITISM ? 1 : 0; i < Population.POPULATION_SIZE; ++i) {
-            newPopulation.getMembers()[i] = crossover(selectIndividual(oldPopulation), selectIndividual(oldPopulation));
+            newPopulation.getMembers()[i] = crossover(parentSelector.selectIndividual(oldPopulation),
+                    parentSelector.selectIndividual(oldPopulation));
         }
         return newPopulation;
     }
@@ -59,23 +67,5 @@ public class Evolution {
     private char mutate() {
         System.out.println("Mutating gene");
         return (char) (new Random().nextInt(26) + 'a');
-    }
-
-    /**
-     * Selects the individual that will be selected for crossover
-     *
-     * @param population
-     * @return
-     */
-    private Individual selectIndividual(Population population) {
-        int random = new Random().nextInt(population.getTotalFitness());
-        int sum = 0;
-        for (Individual individual : population.getMembers()) {
-            sum += Fitness.calculateFitness(individual);
-            if (sum > random) {
-                return individual;
-            }
-        }
-        throw new RuntimeException("No individual was chosen for crossover!");
     }
 }

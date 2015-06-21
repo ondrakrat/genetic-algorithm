@@ -1,13 +1,15 @@
 package genetic;
 
+import genetic.selection.RouletteWheelSelector;
+
 /**
- * Created by Ondřej Kratochvíl on 21.6.15.
+ * @author Ondřej Kratochvíl
  */
 public class Main {
 
     public static void main(String[] args) {
         Fitness fitness = new Fitness("pokus");
-        Evolution evolution = new Evolution();
+        Evolution evolution = new Evolution(new RouletteWheelSelector());
         System.out.printf("Solution set to '%s', maximum fitness value is %d%n%n", Fitness.SOLUTION, Fitness.MAX_FITNESS);
         Population population = null;
         do {
